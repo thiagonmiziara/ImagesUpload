@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable prettier/prettier */
 import { Button, Box } from '@chakra-ui/react';
 import { useMemo } from 'react';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery, GetNextPageParamFunction } from 'react-query';
 
 import { Header } from '../components/Header';
 import { CardList } from '../components/CardList';
@@ -8,7 +10,13 @@ import { api } from '../services/api';
 import { Loading } from '../components/Loading';
 import { Error } from '../components/Error';
 
+
+
 export default function Home(): JSX.Element {
+
+  const fetchImages = ({ pageParam = null }) =>
+     api.get(`api/images/?after=${pageParam}`);
+
   const {
     data,
     isLoading,
@@ -17,19 +25,34 @@ export default function Home(): JSX.Element {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    'images',
     // TODO AXIOS REQUEST WITH PARAM
+    'images',fetchImages,
+    {
+    getNextPageParam: (lastPage, pages): GetNextPageParamFunction => lastPage.data.after,}
     ,
     // TODO GET AND RETURN NEXT PAGE PARAM
+
   );
 
   const formattedData = useMemo(() => {
     // TODO FORMAT AND FLAT DATA ARRAY
+   const  imageArray = data.pages[0].data.data.map(imgData =>{
+     return imgData;
+   });
+
+   return imageArray.flat();
+      
   }, [data]);
 
   // TODO RENDER LOADING SCREEN
+  if(isLoading) {
+    return <Loading/>
+  }
 
   // TODO RENDER ERROR SCREEN
+  if(isError){
+    return <Error/>;
+  }
 
   return (
     <>
