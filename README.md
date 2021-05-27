@@ -6,7 +6,7 @@
   <!-- <a href="https://desafio.netlify.com">Demo</a> -->
 </div>
 
-<h1 align="center">UpFy</h1>
+<h1 align="center">UpFi</h1>
 
 <a href="https://images-upload.vercel.app/"><h2>Link para teste</h2> </a>
 
